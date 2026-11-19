@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bázistábor &middot; folyamatos karbantartás &amp; elsőbbségi support | Rakonczay Gábor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EDEFF0; --paper-2:#E4E8EA;
+    --ink:#14181B; --deep:#0B1115; --deep-2:#111A20;
+    --signal:#EF5320; --signal-deep:#C8410F;
+    --steel:#697B88; --muted:#46535B;
+    --ice:#D2DBDF; --ice-soft:#DEE5E8;
+    --maxw:960px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;font-size:18px;line-height:1.62;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
+  .narrow{max-width:760px}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;letter-spacing:-.01em;line-height:1.08;margin:0}
+  p{margin:0 0 1.05em}
+  strong{font-weight:600}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .signal{color:var(--signal)}
+  .kicker{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--steel);font-weight:500}
+
+  .btn{display:inline-block;background:var(--signal);color:#fff;text-decoration:none;font-weight:600;
+    font-size:16px;padding:16px 32px;border-radius:5px;transition:background .2s,transform .2s}
+  .btn:hover{background:var(--signal-deep);transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ice);font-weight:500}
+  .btn.ghost:hover{background:#fff;transform:none}
+  .btn.white{background:#fff;color:var(--ink)}
+  .btn.white:hover{background:#fff;opacity:.92}
+
+  /* topbar */
+  .topbar{border-bottom:1px solid var(--ice);background:rgba(237,239,240,.9);backdrop-filter:blur(8px);position:sticky;top:0;z-index:20}
+  .topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:58px}
+  .brand{font-family:"Fraunces",serif;font-weight:600;font-size:17px}
+  .brand small{font-family:"JetBrains Mono",monospace;font-weight:400;font-size:10px;letter-spacing:.14em;color:var(--steel);text-transform:uppercase;display:block;margin-top:-2px}
+  .topbar .tag{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel)}
+
+  /* hero */
+  .hero{padding:80px 0 64px;position:relative;overflow:hidden}
+  .hero .kicker{margin-bottom:22px}
+  .hero h1{font-size:clamp(40px,6.6vw,70px);font-weight:500;max-width:15ch}
+  .hero h1 .em{font-style:italic;color:var(--signal)}
+  .hero .sub{font-size:clamp(18px,2.3vw,21px);color:var(--muted);max-width:40em;margin-top:26px}
+  .hero .actions{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:34px}
+  .pricetag{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--steel)}
+  .pricetag b{font-family:"Fraunces",serif;font-size:19px;color:var(--ink);font-weight:600;letter-spacing:0}
+
+  section{padding:58px 0}
+  .lead{font-size:clamp(21px,2.8vw,28px);font-family:"Fraunces",serif;font-weight:500;line-height:1.28;max-width:20ch}
+  .body-p{color:var(--muted);max-width:42em}
+  .center{text-align:center;margin-left:auto;margin-right:auto}
+  hr.div{height:1px;background:var(--ice);border:0;margin:0}
+
+  /* dark band */
+  .band{background:var(--deep);color:#E7ECEE;position:relative;overflow:hidden}
+  .band h2{color:#fff}
+  .band p{color:#B9C4CA}
+  .band .big{font-family:"Fraunces",serif;font-size:clamp(26px,3.8vw,40px);font-weight:500;color:#fff;line-height:1.14;margin:0 0 .5em;max-width:18ch}
+  .band .big .em{font-style:italic;color:var(--signal)}
+  .band .glow{position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(239,83,32,.24),transparent 68%);right:-120px;top:-140px;pointer-events:none}
+  .stakes{list-style:none;margin:26px 0 0;padding:0;max-width:40em}
+  .stakes li{position:relative;padding:0 0 14px 28px;color:#C3CDD3;font-size:16.5px}
+  .stakes li::before{content:"!";position:absolute;left:0;top:1px;width:18px;height:18px;border-radius:50%;background:var(--signal);color:#fff;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+  /* ROI callout */
+  .roi{border:1px solid var(--ice);border-left:4px solid var(--signal);background:#fff;border-radius:5px;padding:32px 34px;margin-top:8px}
+  .roi .big{font-family:"Fraunces",serif;font-size:clamp(22px,3vw,30px);font-weight:500;line-height:1.2;margin:0 0 .4em}
+  .roi .big .em{color:var(--signal);font-style:italic}
+  .roi p{margin:0;color:var(--muted)}
+
+  /* benefit cards */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ice);border:1px solid var(--ice);border-radius:5px;overflow:hidden;margin-top:12px}
+  .card{background:#fff;padding:26px 28px}
+  .card .ic{width:34px;height:34px;border-radius:8px;background:rgba(239,83,32,.1);color:var(--signal);display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-weight:700;font-size:15px;margin-bottom:14px}
+  .card h3{font-size:19px;margin:0 0 6px}
+  .card p{font-size:15px;color:var(--muted);margin:0}
+  .card.hot{background:#fff;box-shadow:inset 3px 0 0 var(--signal)}
+
+  /* spotlight */
+  .spot{background:var(--deep-2);color:#fff;border-radius:6px;padding:40px 42px;position:relative;overflow:hidden}
+  .spot .kicker{color:var(--signal)}
+  .spot h2{color:#fff;font-size:clamp(24px,3.2vw,34px);margin:10px 0 12px;max-width:20ch}
+  .spot p{color:#B9C4CA;max-width:40em;margin:0}
+
+  /* compare */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:12px}
+  .col{border:1px solid var(--ice);border-radius:5px;background:#fff;padding:26px 28px}
+  .col.good{border-color:var(--signal);border-width:1.5px}
+  .col .ch{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
+  .col.bad .ch{color:var(--steel)}
+  .col.good .ch{color:var(--signal)}
+  .col ul{list-style:none;margin:0;padding:0}
+  .col li{position:relative;padding:0 0 11px 26px;font-size:15.5px;color:var(--muted)}
+  .col li:last-child{padding-bottom:0}
+  .col li::before{position:absolute;left:0;top:0;font-family:"JetBrains Mono",monospace;font-weight:700}
+  .col.bad li::before{content:"\00d7";color:var(--steel);font-size:17px;top:-1px}
+  .col.good li::before{content:"\2713";color:var(--signal)}
+
+  /* price card */
+  .price{border:2px solid var(--signal);border-radius:8px;background:#fff;overflow:hidden;max-width:620px;margin:12px auto 0}
+  .price .ph{background:var(--deep);color:#fff;padding:26px 32px;text-align:center}
+  .price .ph .lbl{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8b99a3}
+  .price .ph .amt{font-family:"Fraunces",serif;font-size:clamp(40px,7vw,58px);font-weight:600;line-height:1;margin-top:8px}
+  .price .ph .amt span{font-family:"JetBrains Mono",monospace;font-size:16px;color:var(--signal);font-weight:400}
+  .price .ph .note{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:#8b99a3;margin-top:10px}
+  .price .pb{padding:26px 32px}
+  .price .pb ul{list-style:none;margin:0 0 22px;padding:0}
+  .price .pb li{position:relative;padding:0 0 11px 26px;font-size:15.5px;color:var(--ink)}
+  .price .pb li::before{content:"\2713";position:absolute;left:0;top:0;color:var(--signal);font-family:"JetBrains Mono",monospace;font-weight:700}
+  .price .pb li small{display:block;color:var(--steel);font-size:12.5px}
+  .price .pb .cta-row{text-align:center}
+  .price .pb .cta-row .btn{width:100%;max-width:360px}
+  .reassure{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--steel);text-align:center;margin-top:14px}
+
+  /* cta band */
+  .ctaband{background:var(--signal);color:#fff;border-radius:8px;padding:48px 42px;text-align:center}
+  .ctaband h2{color:#fff;font-size:clamp(26px,3.6vw,38px);max-width:22ch;margin:0 auto 10px}
+  .ctaband p{color:rgba(255,255,255,.9);max-width:36em;margin:0 auto 24px}
+  .ctaband .contact{font-family:"JetBrains Mono",monospace;font-size:13px;color:rgba(255,255,255,.85);margin-top:18px}
+  .ctaband .contact a{color:#fff}
+
+  footer{border-top:1px solid var(--ice);padding:40px 0 70px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;align-items:baseline}
+  footer .fb{font-family:"Fraunces",serif;font-size:18px;font-weight:600}
+  footer .fn{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
+
+  .js .reveal{opacity:0;transform:translateY(16px)}
+  .js .reveal.in{opacity:1;transform:none;transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+  @media (prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none}}
+
+  @media (max-width:680px){
+    body{font-size:16px;overflow-x:hidden}
+    .wrap{padding:0 20px}
+    .cards,.compare{grid-template-columns:1fr}
+    .band .big,.hero h1,.spot h2,.lead,.roi .big,.ctaband h2,.ctaband p{max-width:none}
+    section{padding:44px 0}
+    .hero{padding:52px 0 40px}
+    .hero h1{font-size:clamp(32px,8.6vw,44px)}
+    .hero .sub{font-size:17px}
+    .hero .actions{flex-direction:column;align-items:stretch;gap:14px}
+    .hero .actions .btn{width:100%;text-align:center}
+    .pricetag{text-align:center}
+    .roi{padding:24px 22px}
+    .spot,.ctaband{padding:30px 22px}
+    .band .stakes li{font-size:15.5px}
+    .price .ph{padding:24px 20px}
+    .price .pb{padding:24px 20px}
+    .price .pb .cta-row .btn{width:100%;max-width:none}
+    .ctaband .btn{width:100%}
+    .col{padding:22px 22px}
+    .card{padding:22px 22px}
+  }
+  @media (max-width:380px){
+    .wrap{padding:0 16px}
+    .hero h1{font-size:30px}
+    .price .ph .amt{font-size:44px}
+  }
+</style>
+</head>
+<body>
+<script>document.documentElement.className='js';</script>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">Gyenes Donát<small>Webdesign &middot; Copy &middot; Brand</small></div>
+    <div class="tag">Karbantartás &amp; support</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">Bázistábor &middot; folyamatos karbantartás az új oldaladhoz</div>
+    <h1>Az <span class="em">egyetlen értékesítőd</span>, végig a legjobb formában tartva.</h1>
+    <p class="sub">Az új weboldalad kész, és már dolgozik érted. A kérdés mostantól nem az, hogy hoz-e megkereséseket, hanem hogy <strong>biztosan fusson akkor is</strong>, amikor egy döntéshozó épp téged keres. A Bázistábor szolgáltatás pontosan ezt garantálja: karbantartott, biztonságos oldalt, és engem elsőbbségi eléréssel, amikor szükséged van rá.</p>
+    <div class="actions">
+      <a class="btn" href="#csomag">Kérem a Bázistábort &rarr;</a>
+      <div class="pricetag">Havidíj: <b>29&nbsp;990&nbsp;Ft/hó</b> &middot; bármikor felmondható</div>
+    </div>
+  </div>
+</header>
+
+<hr class="div">
+
+<!-- RECOGNITION / STAKES -->
+<section class="band">
+  <div class="wrap narrow">
+    <div class="glow"></div>
+    <div class="kicker reveal" style="color:#7C8C97">A tét</div>
+    <p class="big reveal" style="margin-top:14px">Egy weboldal, ami a bevételed hozza, <span class="em">nem állhat le észrevétlenül.</span></p>
+    <p class="reveal">A legtöbb hiba nem látványos. Egy lejárt plugin, egy elavult rendszer, egy csendes támadás vagy egy hibás frissítés, és az oldal lassul, hibát dob, vagy épp akkor nem elérhető, amikor egy rendezvényszervező téged keres. Mivel marketingre nem költesz, ez az egyetlen kapud. Ha ez a kapu egy napra bezárul, az nem kényelmetlenség, hanem <strong>potenciálisan elmaradt felkérés</strong>.</p>
+    <ul class="stakes">
+      <li class="reveal">Egy frissítés nélküli WordPress a feltörések első számú célpontja.</li>
+      <li class="reveal">Mentés nélkül egy hiba nem bosszúság, hanem az egész oldal elvesztése.</li>
+      <li class="reveal">Ha baj van, és engem nem érsz el időben, a megkereső nem vár: továbbléphet.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ROI -->
+<section>
+  <div class="wrap narrow">
+    <div class="kicker reveal">A megtérülés</div>
+    <div class="roi reveal" style="margin-top:14px">
+      <p class="big">Egy <span class="em">teljes év</span> karbantartás kevesebb, mint egyetlen előadásod díja.</p>
+      <p>29&nbsp;990&nbsp;Ft/hó, vagyis nagyjából 360&nbsp;000&nbsp;Ft egy évre. Ha egy átlagos céges előadásod ára 400&ndash;500&nbsp;ezer forint, akkor a Bázistábor egész éves díja <strong>még egyetlen előadásod árát sem éri el</strong>. Cserébe pont azt az egy eszközt védi, ami ezeket az előadásokat hozza. Matematikailag már akkor megtérül, ha egyetlen évben <strong>egyetlen</strong> megkeresést is megment attól, hogy egy leállás miatt elvesszen.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- SPOTLIGHT: priority access -->
+<section>
+  <div class="wrap">
+    <div class="spot reveal">
+      <div class="glow" style="background:radial-gradient(circle,rgba(239,83,32,.22),transparent 68%);position:absolute;width:360px;height:360px;border-radius:50%;right:-100px;top:-120px"></div>
+      <div class="kicker">A legfontosabb, amit kapsz</div>
+      <h2>Garantált, elsőbbségi elérhetőség. Nem kell sorban állnod.</h2>
+      <p>Tudom, milyen, amikor egy fontos módosítás vagy egy hiba napokig vár, mert a másik fél épp le van terhelve. A Bázistábor ezt zárja ki: a te oldalad <strong>soron kívül</strong> megy. Ha írsz, nem a sor végére kerülsz, hanem előre. Ez a nyugalom, hogy bármi történik, van valaki, aki azonnal lép.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFIT CARDS -->
+<section style="padding-top:6px">
+  <div class="wrap">
+    <div class="kicker reveal">Mi van benne</div>
+    <h2 class="reveal" style="font-size:clamp(26px,3.4vw,36px);margin:10px 0 4px">Minden, amitől nem kell az oldalra gondolnod</h2>
+    <div class="cards reveal">
+      <div class="card hot"><div class="ic">1</div><h3>Elsőbbségi elérhetőség</h3><p>Soron kívül foglalkozom az oldaladdal. Nem kell más munkáim mögött várnod.</p></div>
+      <div class="card hot"><div class="ic">!</div><h3>SOS hibajavítás</h3><p>Ha valami elromlik, elsőbbséggel, azonnal javítom. Nincs napokig tartó bizonytalanság.</p></div>
+      <div class="card"><div class="ic">&#8635;</div><h3>Heti biztonsági mentés</h3><p>Az oldal teljes tartalmáról, hogy bármilyen hiba esetén percek alatt visszaállítható legyen.</p></div>
+      <div class="card"><div class="ic">&#8593;</div><h3>Heti WordPress-frissítés</h3><p>A rendszer folyamatosan naprakész és biztonságos marad, nem öregszik el a háttérben.</p></div>
+      <div class="card"><div class="ic">&#9881;</div><h3>Pluginok frissítése</h3><p>Rendszeres frissítés a folyamatos kompatibilitásért és a biztonsági rések zárásáért.</p></div>
+      <div class="card"><div class="ic">&#9679;</div><h3>Vírus- és malware-védelem</h3><p>Proaktív, folyamatos keresés és irtás. Védelem, nem utólagos tűzoltás.</p></div>
+      <div class="card" style="grid-column:1/-1"><div class="ic">2h</div><h3>Havi 2 óra díjmentes tartalommódosítás</h3><p>Ezen belül korlátlan kérés: új előadás vagy referencia felvitele, szövegek és képek cseréje, apró igazítások. Te szólsz, én megcsinálom, külön költség nélkül.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- COMPARE -->
+<section>
+  <div class="wrap narrow">
+    <div class="kicker reveal center">Két lehetőség</div>
+    <h2 class="reveal center" style="font-size:clamp(24px,3.2vw,32px);margin:10px auto 6px;max-width:22ch">A kérdés nem az, kell-e karbantartás. Az, hogy ki csinálja.</h2>
+    <div class="compare reveal">
+      <div class="col bad">
+        <div class="ch">Bázistábor nélkül</div>
+        <ul>
+          <li>Magadnak kell figyelned a frissítéseket és a mentéseket</li>
+          <li>Egy hiba esetén rohanva keresel valakit, aki ráér</li>
+          <li>A biztonság a szerencsén múlik</li>
+          <li>Minden apró módosítás külön egyeztetés és külön számla</li>
+          <li>A kockázat a tiéd</li>
+        </ul>
+      </div>
+      <div class="col good">
+        <div class="ch">Bázistáborral</div>
+        <ul>
+          <li>Minden karbantartás a háttérben, automatikusan megtörténik</li>
+          <li>Baj esetén elsőbbséggel, azonnal lépek</li>
+          <li>Heti mentés és folyamatos védelem, kézzelfogható nyugalom</li>
+          <li>Havi 2 óra módosítás benne, korlátlan kéréssel</li>
+          <li>A kockázat az enyém, a nyugalom a tiéd</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- VALUE VS HOURLY -->
+<section>
+  <div class="wrap narrow">
+    <div class="kicker reveal">Óradíj helyett átalány</div>
+    <div class="roi reveal" style="margin-top:14px">
+      <p class="big">Már a benne foglalt 2 óra módosítás is <span class="em">szinte a teljes díjat</span> fedezi.</p>
+      <p>Gondolj bele, mi történik eseti óradíj esetén: minden apró változtatás külön kérés, külön ajánlat, várakozás a szabad kapacitásomra, és külön számla a teljes óradíjamon. A Bázistáborban a <strong>havi 2 óra tartalommódosítás már benne van</strong>, elsőbbséggel és kiszámítható, fix áron. Ez önmagában közel annyit ér, mint a teljes havidíj, a heti mentés, a frissítések, a védelem és a készenlét pedig gyakorlatilag ráadás. Ha havonta akár csak egyszer igazítanál valamin, már megérte, és a legtöbb hónapban egynél több apróság is adódik.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- PRICE -->
+<section id="csomag">
+  <div class="wrap">
+    <div class="kicker reveal center">Az ajánlat</div>
+    <h2 class="reveal center" style="font-size:clamp(26px,3.6vw,38px);margin:10px auto 4px;max-width:18ch">Bázistábor csomag</h2>
+    <div class="price reveal">
+      <div class="ph">
+        <div class="lbl">Havi díj &middot; bruttó</div>
+        <div class="amt">29&nbsp;990&nbsp;Ft<span>&nbsp;/hó</span></div>
+        <div class="note">Havi számlázás &middot; hosszú elköteleződés nélkül &middot; számlát biztosítok</div>
+      </div>
+      <div class="pb">
+        <ul>
+          <li><strong>Garantált, elsőbbségi elérhetőség</strong><small>soron kívül, nem kell várnod</small></li>
+          <li><strong>SOS hibajavítás</strong><small>azonnal, amint szükség van rá</small></li>
+          <li><strong>Heti biztonsági mentés</strong><small>a teljes tartalomról</small></li>
+          <li><strong>Heti WordPress-frissítés</strong><small>mindig naprakész rendszer</small></li>
+          <li><strong>Pluginok rendszeres frissítése</strong></li>
+          <li><strong>Vírus- és malware-keresés, -irtás</strong><small>proaktív, folyamatos védelem</small></li>
+          <li><strong>Havi 2 óra díjmentes tartalommódosítás</strong><small>korlátlan kéréssel a 2 órán belül</small></li>
+        </ul>
+        <div class="cta-row">
+          <a class="btn" href="mailto:donat.gyenes@gmail.com?subject=Rakonczay%20%E2%80%93%20B%C3%A1zist%C3%A1bor%20csomag%2C%20k%C3%A9rem">Kérem a Bázistábort &rarr;</a>
+        </div>
+        <div class="reassure">Bármikor felmondható &middot; semmilyen kötöttség</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section>
+  <div class="wrap">
+    <div class="ctaband reveal">
+      <h2>Az oldal kész. Tartsuk is életben.</h2>
+      <p>A felépített értéket akkor óvjuk meg a legjobban, ha onnantól valaki folyamatosan vigyáz rá. Egy üzenet, és a Bázistábor indul: mostantól nem kell az oldalra gondolnod, mert én gondolok rá.</p>
+      <a class="btn white" href="mailto:donat.gyenes@gmail.com?subject=Rakonczay%20%E2%80%93%20B%C3%A1zist%C3%A1bor%20csomag%2C%20k%C3%A9rem">Igen, indítsuk el &rarr;</a>
+      <div class="contact">Kérdés esetén: <a href="mailto:donat.gyenes@gmail.com">donat.gyenes@gmail.com</a> &middot; +36&nbsp;30&nbsp;729&nbsp;0244</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fb">Gyenes Donát</div>
+    <div class="fn">Bázistábor &middot; Rakonczay Gábor &middot; 2026</div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in')});return;}
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(function(e){io.observe(e)});
+  })();
+</script>
+</body>
+</html>
